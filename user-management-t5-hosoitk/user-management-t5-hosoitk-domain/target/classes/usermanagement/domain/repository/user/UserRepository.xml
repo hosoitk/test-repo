@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="usermanagement.domain.repository.user.UserRepository">
+
+    <resultMap id="userResultMap" type="Account">
+        <id property="userId" column="user_id" />
+        <result property="username" column="username" />
+        <result property="birthday" column="birthday" />
+        <result property="address" column="address" />
+        <result property="telNum" column="tel_num" />
+        <result property="roles" column="roles" />
+        <result property="password" column="password" />
+        <result property="status" column="status" />
+        <result property="lastUpdate" column="last_update" />
+    </resultMap>
+
+    <select id="countByAccount" resultType="_long">
+        SELECT
+            COUNT(*)
+        FROM
+            t_user
+        <where>
+            <if test="account.userId != null and account.userId !=''">
+                user_id = #{account.userId}
+            </if>
+            <if test="account.username != null and account.username !=''">
+                AND username = #{account.username}
+            </if>
+            <if test="account.birthday != null">
+                AND birthday = #{account.birthday}
+            </if>
+            <if test="account.address != null and account.address !=''">
+                AND address = #{account.address}
+            </if>
+            <if test="account.telNum != null and account.telNum !=''">
+                AND tel_num = #{account.telNum}
+            </if>
+            <if test="account.roles != null and account.roles !=''">
+                AND roles = #{account.roles}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPageByAccount" resultMap="userResultMap">
+        SELECT
+            user_id,
+            username,
+            birthday,
+            address,
+            tel_num,
+            roles,
+            status,
+            last_update
+        FROM
+            t_user
+        <where>
+            <if test="account.userId != null and account.userId !=''">
+                user_id = #{account.userId}
+            </if>
+            <if test="account.username != null and account.username !=''">
+                AND username = #{account.username}
+            </if>
+            <if test="account.birthday != null">
+                AND birthday = #{account.birthday}
+            </if>
+            <if test="account.address != null and account.address !=''">
+                AND address = #{account.address}
+            </if>
+            <if test="account.telNum != null and account.telNum !=''">
+                AND tel_num = #{account.telNum}
+            </if>
+            <if test="account.roles != null and account.roles !=''">
+                AND roles = #{account.roles}
+            </if>
+        </where>
+    </select>
+
+    <select id="findOneByUserId" resultMap="userResultMap">
+        SELECT
+            user_id,
+            username,
+            birthday,
+            address,
+            tel_num,
+            roles,
+            status,
+            last_update
+        FROM
+            t_user
+        <where>
+            <if test="userId != null and userId !=''">
+                user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="register">
+        INSERT INTO
+            t_user
+        (
+        	user_id,
+            username,
+            birthday,
+            address,
+            tel_num,
+            roles,
+            password,
+            status,
+            last_update
+        )
+        VALUES
+        (
+            #{account.userId}
+            ,#{account.username}
+            ,#{account.birthday}
+            ,#{account.address}
+            ,#{account.telNum}
+            ,#{account.roles}
+            ,#{account.password}
+            ,'ACTIVE'
+            ,sysdate
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE
+            t_user
+        SET
+            username = #{account.username},
+            birthday = #{account.birthday},
+            address = #{account.address},
+            tel_num = #{account.telNum},
+            roles = #{account.roles},
+            password = #{account.password},
+            status = 'ACTIVE',
+            last_update = sysdate
+        WHERE
+            user_id = #{account.userId}
+    </update>
+
+</mapper>
